@@ -1,0 +1,62 @@
+modules = ["nodejs-20", "web", "python-3.11", "postgresql-16"]
+run = "npm run dev"
+hidden = [".config", ".git", "generated-icon.png", "node_modules", "dist"]
+
+[nix]
+channel = "stable-24_05"
+packages = ["cairo", "pango", "pkg-config", "libjpeg", "giflib", "librsvg", "util-linux", "nss", "nspr", "at-spi2-atk", "cups", "libdrm", "mesa", "xorg.libXcomposite", "xorg.libXdamage", "xorg.libXrandr", "xorg.libxcb", "xorg.libX11", "xorg.libXext", "xorg.libXfixes", "alsa-lib", "gtk3", "glib", "dbus", "expat", "libxkbcommon"]
+
+[deployment]
+deploymentTarget = "autoscale"
+build = ["npm", "run", "build"]
+run = ["npm", "run", "start"]
+
+[[ports]]
+localPort = 5000
+externalPort = 80
+
+[[ports]]
+localPort = 5099
+externalPort = 3001
+
+[env]
+PORT = "5000"
+
+[workflows]
+runButton = "Project"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Start application"
+
+[[workflows.workflow]]
+name = "Start application"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm run dev"
+waitForPort = 5000
+
+[agent]
+mockupState = "FULLSTACK"
+integrations = ["stripe:1.0.0"]
+
+[userenv]
+
+[userenv.production]
+NODE_ENV = "production"
+
+[userenv.shared]
+VAPID_PUBLIC_KEY = "BKHv77e_--LIpJfw9RZaPu2XRJ914Lfe7vBo9BU-VfwFxzrKg1JhicGS67kXtA9coFkK8KrUmk2hyLAKMePI7EA"
+VAPID_PRIVATE_KEY = "egYOGoIo83MVwDZErJi3_OCzeA89Te8QZA87ucQjMe0"
+VAPID_SUBJECT = "mailto:admin@uprosper.com"
+
+[postMerge]
+path = "scripts/post-merge.sh"
+timeoutMs = 180000

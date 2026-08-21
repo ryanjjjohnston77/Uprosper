@@ -1,0 +1,36 @@
+# Dependencies and build output
+node_modules/
+dist/
+build/
+server/public/
+
+# Local environment files and secret material
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+credentials*.json
+service-account*.json
+
+# Replit and local machine state
+.local/
+.cache/
+.config/
+.upm/
+.agents/
+
+# Uploaded media and generated business exports
+attached_assets/
+exports/
+pitch-exports/
+Uprosper_Pitch_Deck.pdf
+
+# Operating-system and archive files
+.DS_Store
+*.tar.gz
+
+# Tool-generated Vite variants
+vite.config.ts.*
